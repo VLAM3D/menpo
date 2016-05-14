@@ -6,7 +6,7 @@ NOTE: This file is different from the original to fit with menpo's structure.
 """
 
 import numpy as np
-from UnionFind import UnionFind
+from .UnionFind import UnionFind
 
 from menpo.shape import UndirectedGraph
 

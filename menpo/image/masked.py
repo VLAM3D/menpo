@@ -1,4 +1,4 @@
-from __future__ import division
+
 from warnings import warn
 import numpy as np
 binary_erosion = None  # expensive, from scipy.ndimage

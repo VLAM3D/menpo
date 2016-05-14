@@ -2,7 +2,7 @@ import abc
 from menpo.base import Copyable
 
 
-class Transform(Copyable):
+class Transform(Copyable, metaclass=abc.ABCMeta):
     r"""
     Abstract representation of any spatial transform.
 
@@ -46,7 +46,6 @@ class Transform(Copyable):
     For inversion, see the :map:`Invertible` and :map:`VInvertible` mix-ins.
     For alignment, see the :map:`Alignment` mix-in.
     """
-    __metaclass__ = abc.ABCMeta
 
     @property
     def n_dims(self):
@@ -213,7 +212,7 @@ class Transform(Copyable):
         return TransformChain([transform, self])
 
 
-class Transformable(Copyable):
+class Transformable(Copyable, metaclass=abc.ABCMeta):
     r"""
     Interface for objects that know how be transformed by the
     :map:`Transform` interface.
@@ -224,7 +223,6 @@ class Transformable(Copyable):
 
     This allows for the object to define how it should transform itself.
     """
-    __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
     def _transform_inplace(self, transform):

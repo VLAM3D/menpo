@@ -10,7 +10,7 @@ Menpo3dErrorMessage = ("In order to keep menpo's dependencies simple, menpo "
                        "Please install menpo3d to view 3D meshes.")
 
 
-class Renderer(object):
+class Renderer(object, metaclass=abc.ABCMeta):
     r"""
     Abstract class for rendering visualizations. Framework specific
     implementations of these classes are made in order to separate
@@ -38,8 +38,6 @@ class Renderer(object):
         It is not valid to provide a figure id AND request a new figure to
         be rendered on.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, figure_id, new_figure):
         if figure_id is not None and new_figure:
@@ -98,12 +96,10 @@ class Renderer(object):
         pass
 
 
-class Viewable(object):
+class Viewable(object, metaclass=abc.ABCMeta):
     r"""
     Abstract interface for objects that can visualize themselves.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def view_on(self, figure_id, **kwargs):
         r"""

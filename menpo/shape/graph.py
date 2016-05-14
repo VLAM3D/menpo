@@ -8,7 +8,7 @@ from .adjacency import (mask_adjacency_array, mask_adjacency_array_tree,
 from menpo.visualize import PointGraphViewer
 
 
-class Graph(object):
+class Graph(object, metaclass=abc.ABCMeta):
     r"""
     Abstract class for Graph definitions and manipulation.
 
@@ -57,7 +57,6 @@ class Graph(object):
     ValueError
         The vertices must be numbered starting from 0.
     """
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, adjacency_array, copy=True):
         # check that adjacency_array has expected shape

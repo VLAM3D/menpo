@@ -17,7 +17,7 @@ def _connectivity_from_array(array, close_loop=False):
     If ``close_loop`` is true, add an extra connection from the last point to
     the first.
     """
-    conn = zip(array, array[1:])
+    conn = list(zip(array, array[1:]))
     if close_loop:
         conn.append((array[-1], array[0]))
     return np.asarray(conn)
@@ -119,7 +119,7 @@ def _relabel_group_from_dict(pointcloud, labels_to_ranges):
     n_points = pointcloud.n_points
     masks = OrderedDict()
     adjacency_lists = []
-    for label, tup in labels_to_ranges.items():
+    for label, tup in list(labels_to_ranges.items()):
         range_tuple = tup[:-1]
         close_loop = tup[-1]
         adjacency_lists.append(_connectivity_from_range(
@@ -819,9 +819,9 @@ def _build_upper_eyelid():
     middle_indices = np.arange(12, 17)
     upper_eyelid_indices = np.hstack((top_indices, middle_indices))
 
-    upper_eyelid_connectivity = zip(top_indices, top_indices[1:])
+    upper_eyelid_connectivity = list(zip(top_indices, top_indices[1:]))
     upper_eyelid_connectivity += [(0, 12)]
-    upper_eyelid_connectivity += zip(middle_indices, middle_indices[1:])
+    upper_eyelid_connectivity += list(zip(middle_indices, middle_indices[1:]))
     upper_eyelid_connectivity += [(16, 6)]
 
     return upper_eyelid_indices, upper_eyelid_connectivity
@@ -881,14 +881,14 @@ def ibug_open_eye(landmark_group):
     iris_connectivity = _connectivity_from_range(iris_range, close_loop=True)
     pupil_connectivity = _connectivity_from_range(pupil_range, close_loop=True)
 
-    sclera_connectivity = zip(sclera_top, sclera_top[1:])
+    sclera_connectivity = list(zip(sclera_top, sclera_top[1:]))
     sclera_connectivity += [(0, 21)]
-    sclera_connectivity += zip(sclera_bottom, sclera_bottom[1:])
+    sclera_connectivity += list(zip(sclera_bottom, sclera_bottom[1:]))
     sclera_connectivity += [(6, 17)]
 
-    lower_el_connectivity = zip(lower_el_top, lower_el_top[1:])
+    lower_el_connectivity = list(zip(lower_el_top, lower_el_top[1:]))
     lower_el_connectivity += [(6, 7)]
-    lower_el_connectivity += zip(lower_el_bottom, lower_el_bottom[1:])
+    lower_el_connectivity += list(zip(lower_el_bottom, lower_el_bottom[1:]))
     lower_el_connectivity += [(11, 0)]
 
     total_connectivity = np.asarray(upper_el_connectivity +
@@ -951,9 +951,9 @@ def ibug_close_eye_points(landmark_group):
     middle_indices = np.arange(12, 17)
     bottom_indices = np.arange(6, 12)
     lower_indices = np.hstack((bottom_indices, 0, middle_indices))
-    lower_connectivity = zip(bottom_indices, bottom_indices[1:])
+    lower_connectivity = list(zip(bottom_indices, bottom_indices[1:]))
     lower_connectivity += [(0, 12)]
-    lower_connectivity += zip(middle_indices, middle_indices[1:])
+    lower_connectivity += list(zip(middle_indices, middle_indices[1:]))
     lower_connectivity += [(11, 0)]
 
     total_connectivity = np.asarray(upper_connectivity + lower_connectivity)

@@ -5,7 +5,7 @@ import numpy as np
 from menpo.visualize.base import Renderer
 
 
-class MatplotlibRenderer(Renderer):
+class MatplotlibRenderer(Renderer, metaclass=abc.ABCMeta):
     r"""
     Abstract class for rendering visualizations using Matplotlib.
 
@@ -17,8 +17,6 @@ class MatplotlibRenderer(Renderer):
     new_figure : bool
         If `True`, creates a new figure to render on.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, figure_id, new_figure):
         super(MatplotlibRenderer, self).__init__(figure_id, new_figure)
@@ -47,9 +45,7 @@ class MatplotlibRenderer(Renderer):
         return self.figure
 
 
-class MatplotlibSubplots(object):
-
-    __metaclass__ = abc.ABCMeta
+class MatplotlibSubplots(object, metaclass=abc.ABCMeta):
 
     def _subplot_layout(self, num_subplots):
         if num_subplots < 2:
@@ -179,8 +175,8 @@ class MatplotlibPointGraphViewer2d(MatplotlibRenderer):
 
         # Flip x and y for viewing if points are tied to an image
         points = self.points[:, ::-1] if image_view else self.points
-        lines = zip(points[self.adjacency_list[:, 0], :],
-                    points[self.adjacency_list[:, 1], :])
+        lines = list(zip(points[self.adjacency_list[:, 0], :],
+                    points[self.adjacency_list[:, 1], :]))
 
         ax = plt.gca()
         lc = mc.LineCollection(lines, colors=colour_array, linewidths=1,
@@ -260,7 +256,7 @@ class MatplotlibLandmarkViewer2d(MatplotlibRenderer):
 
     def _build_sub_pointclouds(self):
         sub_pointclouds = []
-        for label, indices in self.labels_to_masks.iteritems():
+        for label, indices in self.labels_to_masks.items():
             mask = self.labels_to_masks[label]
             sub_pointclouds.append((label, self.pointcloud.from_mask(mask)))
         return sub_pointclouds

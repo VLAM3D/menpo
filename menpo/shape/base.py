@@ -4,7 +4,7 @@ from menpo.landmark import LandmarkableViewable
 from menpo.transform.base import Transformable
 
 
-class Shape(Vectorizable, Transformable, LandmarkableViewable):
+class Shape(Vectorizable, Transformable, LandmarkableViewable, metaclass=abc.ABCMeta):
     """
     Abstract representation of shape. Shapes are :map:`Transformable`,
     :map:`Vectorizable`, :map:`Landmarkable` and :map:`Viewable`. This base
@@ -13,8 +13,6 @@ class Shape(Vectorizable, Transformable, LandmarkableViewable):
     :meth:`_transform_self_inplace` method that handles transforming the Shape
     itself.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def _transform_inplace(self, transform):
         """

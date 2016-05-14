@@ -66,8 +66,8 @@ def test_landmarkgroup_copy_method():
                               lgroup.lms.points))
     # Check the mask dictionary is deepcopied properly
     assert (lgroup._labels_to_masks is not lgroup_copy._labels_to_masks)
-    masks = zip(lgroup_copy._labels_to_masks.values(),
-                lgroup._labels_to_masks.values())
+    masks = list(zip(list(lgroup_copy._labels_to_masks.values()),
+                list(lgroup._labels_to_masks.values())))
     for ms in masks:
         assert (ms[0] is not ms[1])
 

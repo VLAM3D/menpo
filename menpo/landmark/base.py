@@ -9,7 +9,7 @@ from menpo.visualize import LandmarkViewer
 from menpo.visualize.base import Viewable
 
 
-class Landmarkable(Copyable):
+class Landmarkable(Copyable, metaclass=abc.ABCMeta):
     r"""
     Abstract interface for object that can have landmarks attached to them.
     Landmarkable objects have a public dictionary of landmarks which are
@@ -20,8 +20,6 @@ class Landmarkable(Copyable):
     are wrapped inside a :map:`LandmarkGroup` object that performs
     useful tasks like label filtering and viewing.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self):
         self._landmarks = None
@@ -140,7 +138,7 @@ class LandmarkManager(MutableMapping, Transformable, Viewable):
     def n_dims(self):
         if self.n_groups != 0:
             # Python version independent way of getting the first value
-            for v in self._landmark_groups.values():
+            for v in list(self._landmark_groups.values()):
                 return v.n_dims
         else:
             return None
@@ -158,7 +156,7 @@ class LandmarkManager(MutableMapping, Transformable, Viewable):
         """
         # do a normal copy. The dict will be shallow copied - rectify that here
         new = Copyable.copy(self)
-        for k, v in new._landmark_groups.items():
+        for k, v in list(new._landmark_groups.items()):
             new._landmark_groups[k] = v.copy()
         return new
 
@@ -271,10 +269,10 @@ class LandmarkManager(MutableMapping, Transformable, Viewable):
 
         :type: list of `string`
         """
-        return self._landmark_groups.keys()
+        return list(self._landmark_groups.keys())
 
     def _transform_inplace(self, transform):
-        for group in self._landmark_groups.values():
+        for group in list(self._landmark_groups.values()):
             group.lms._transform_inplace(transform)
         return self
 
@@ -390,7 +388,7 @@ class LandmarkGroup(MutableMapping, Copyable, Viewable):
             raise ValueError('Landmark groups are designed for their internal '
                              'state, other than owernship, to be immutable. '
                              'Empty label sets are not permitted.')
-        if np.vstack(labels_to_masks.values()).shape[1] != pointcloud.n_points:
+        if np.vstack(list(labels_to_masks.values())).shape[1] != pointcloud.n_points:
             raise ValueError('Each mask must have the same number of points '
                              'as the landmark pointcloud.')
         if type(labels_to_masks) is dict:
@@ -404,7 +402,7 @@ class LandmarkGroup(MutableMapping, Copyable, Viewable):
         if copy:
             self._pointcloud = pointcloud.copy()
             self._labels_to_masks = OrderedDict([(l, m.copy()) for l, m in
-                                                 labels_to_masks.items()])
+                                                 list(labels_to_masks.items())])
         else:
             self._pointcloud = pointcloud
             self._labels_to_masks = labels_to_masks
@@ -421,7 +419,7 @@ class LandmarkGroup(MutableMapping, Copyable, Viewable):
 
         """
         new = Copyable.copy(self)
-        for k, v in new._labels_to_masks.items():
+        for k, v in list(new._labels_to_masks.items()):
             new._labels_to_masks[k] = v.copy()
         return new
 
@@ -510,7 +508,7 @@ class LandmarkGroup(MutableMapping, Copyable, Viewable):
 
         :type: list of `string`
         """
-        return self._labels_to_masks.keys()
+        return list(self._labels_to_masks.keys())
 
     @property
     def n_labels(self):
@@ -605,7 +603,7 @@ class LandmarkGroup(MutableMapping, Copyable, Viewable):
         If any one point is not covered by a label, then raise a
         ``ValueError``.
         """
-        unlabelled_points = np.sum(self._labels_to_masks.values(), axis=0) == 0
+        unlabelled_points = np.sum(list(self._labels_to_masks.values()), axis=0) == 0
         if np.any(unlabelled_points):
             raise ValueError('Every point in the landmark pointcloud must be '
                              'labelled. Points {0} were unlabelled.'.format(
@@ -638,7 +636,7 @@ class LandmarkGroup(MutableMapping, Copyable, Viewable):
         masks_to_keep = [l[overlap] for l in masks_to_keep]
 
         return LandmarkGroup(self._pointcloud.from_mask(overlap),
-                             OrderedDict(zip(labels, masks_to_keep)))
+                             OrderedDict(list(zip(labels, masks_to_keep))))
 
     def tojson(self):
         r"""

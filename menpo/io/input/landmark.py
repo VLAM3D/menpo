@@ -10,7 +10,7 @@ from menpo.transform import Scale
 from .base import Importer
 
 
-class LandmarkImporter(Importer):
+class LandmarkImporter(Importer, metaclass=abc.ABCMeta):
     """
     Abstract base class for importing landmarks.
 
@@ -19,8 +19,6 @@ class LandmarkImporter(Importer):
     filepath : string
         Absolute filepath of the landmarks.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, filepath):
         super(LandmarkImporter, self).__init__(filepath)
@@ -117,7 +115,7 @@ class ASFImporter(LandmarkImporter):
         xs = np.empty([count, 1])
         ys = np.empty([count, 1])
         connectivity = np.empty([count, 2], dtype=np.int)
-        for i in xrange(count):
+        for i in range(count):
             # Though unpacked, they are still all strings
             # Only unpack the first 7
             (path_num, path_type, xpos, ypos,
@@ -259,7 +257,7 @@ class LM2Importer(LandmarkImporter):
             raise ImportError("LM2 landmarks are incorrectly formatted. "
                               "Expected a list of labels beginning with "
                               "'Labels:' but found '{0}'".format(labels_str))
-        for i in xrange(num_points):
+        for i in range(num_points):
             # Lowercase, remove spaces and replace with underscores
             l = landmark_text.pop(0)
             l = '_'.join(l.lower().split())
@@ -274,7 +272,7 @@ class LM2Importer(LandmarkImporter):
                               "but found '{0}'".format(coords_str))
         xs = []
         ys = []
-        for i in xrange(num_points):
+        for i in range(num_points):
             p = landmark_text.pop(0).split()
             xs.append(float(p[0]))
             ys.append(float(p[1]))
@@ -289,7 +287,7 @@ class LM2Importer(LandmarkImporter):
         masks = np.eye(num_points).astype(np.bool)
         masks = np.vsplit(masks, num_points)
         masks = [np.squeeze(m) for m in masks]
-        self.labels_to_masks = OrderedDict(zip(labels, masks))
+        self.labels_to_masks = OrderedDict(list(zip(labels, masks)))
 
 
 class LJSONImporter(LandmarkImporter):

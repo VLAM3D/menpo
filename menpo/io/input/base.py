@@ -362,7 +362,7 @@ def _import(filepath, extensions_map, keep_importer=False,
             # paths
             if lm_paths is None:
                 continue
-            for group_name, lm_path in lm_paths.iteritems():
+            for group_name, lm_path in list(lm_paths.items()):
                 lms = import_landmark_file(lm_path, asset=x)
                 if x.n_dims == lms.n_dims:
                     x.landmarks[group_name] = lms
@@ -585,7 +585,7 @@ def filter_extensions(filepaths, extensions_map):
     basenames : list of strings
         A list of basenames
     """
-    extensions = extensions_map.keys()
+    extensions = list(extensions_map.keys())
     return [os.path.basename(f) for f in filepaths
             if os.path.splitext(f)[1] in extensions]
 
@@ -622,9 +622,9 @@ def find_alternative_files(file_type, filepath, extensions_map):
         all_paths = find_extensions_from_basename(filepath)
         base_names = filter_extensions(all_paths, extensions_map)
         if len(base_names) > 1:
-            print("Warning: More than one {0} was found: "
+            print(("Warning: More than one {0} was found: "
                   "{1}. Taking the first by default".format(
-                  file_type, base_names))
+                  file_type, base_names)))
         return base_names[0]
     except Exception as e:
         raise ImportError("Failed to find a {0} for {1} from types {2}. "
@@ -658,7 +658,7 @@ def _images_unrelated_to_meshes(image_paths, mesh_texture_paths):
     return [image_name_to_path[i] for i in images_unrelated_to_mesh]
 
 
-class Importer(object):
+class Importer(object, metaclass=abc.ABCMeta):
     r"""
     Abstract representation of an Importer. Construction of an importer simply
     sets the filepaths etc up. To actually import the object and build a valid
@@ -671,7 +671,6 @@ class Importer(object):
     filepath : string
         An absolute filepath
     """
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, filepath):
         self.filepath = os.path.abspath(os.path.expanduser(filepath))

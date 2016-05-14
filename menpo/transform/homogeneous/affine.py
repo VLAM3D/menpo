@@ -325,15 +325,13 @@ class AlignmentAffine(HomogFamilyAlignment, Affine):
         return Affine(self.h_matrix, skip_checks=True)
 
 
-class DiscreteAffine(object):
+class DiscreteAffine(object, metaclass=abc.ABCMeta):
     r"""
     A discrete Affine transform operation (such as a :meth:`Scale`,
     :class:`Translation` or :meth:`Rotation`). Has to be able to invertable.
     Make sure you inherit from :class:`DiscreteAffine` first,
     for optimal `decompose()` behavior.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def decompose(self):
         r"""

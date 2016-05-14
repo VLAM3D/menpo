@@ -49,7 +49,7 @@ class Copyable(object):
         """
         # print('copy called on {}'.format(type(self).__name__))
         new = self.__class__.__new__(self.__class__)
-        for k, v in self.__dict__.iteritems():
+        for k, v in list(self.__dict__.items()):
             try:
                 new.__dict__[k] = v.copy()
                 # if not isinstance(v, Copyable):
@@ -60,7 +60,7 @@ class Copyable(object):
         return new
 
 
-class Vectorizable(Copyable):
+class Vectorizable(Copyable, metaclass=abc.ABCMeta):
     """
     Flattening of rich objects to vectors and rebuilding them back.
 
@@ -69,8 +69,6 @@ class Vectorizable(Copyable):
     statistical analysis of objects, which commonly requires the data
     to be provided as a single vector.
     """
-
-    __metaclass__ = abc.ABCMeta
 
     @property
     def n_parameters(self):
@@ -143,7 +141,7 @@ class Vectorizable(Copyable):
         return new
 
 
-class Targetable(Copyable):
+class Targetable(Copyable, metaclass=abc.ABCMeta):
     """Interface for objects that can produce a :attr:`target` :map:`PointCloud`.
 
 
@@ -162,7 +160,6 @@ class Targetable(Copyable):
     called. This will in turn trigger :meth:`_new_target_from_state`, which each
     subclass must implement.
     """
-    __metaclass__ = abc.ABCMeta
 
     @property
     def n_dims(self):

@@ -35,7 +35,7 @@ def optimal_rotation_matrix(source, target):
 # see http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
 # for details
 
-class Rotation(DiscreteAffine, Similarity):
+class Rotation(DiscreteAffine, Similarity, metaclass=abc.ABCMeta):
     r"""
     Abstract `n_dims` rotation transform.
 
@@ -44,7 +44,6 @@ class Rotation(DiscreteAffine, Similarity):
     rotation_matrix : (D, D) ndarray
         A valid, square rotation matrix
     """
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, rotation_matrix, skip_checks=False):
         h_matrix = np.eye(rotation_matrix.shape[0] + 1)

@@ -21,10 +21,10 @@ def test_imagewindowiterator_hog_padding():
             mode='dense', window_step_vertical=window_step_vertical[i, 0],
             window_step_horizontal=window_step_horizontal[i, 0],
             window_step_unit='pixels', padding=True)
-        n_windows_horizontal = len(range(0, image_width[i, 0],
-                                         window_step_horizontal[i, 0]))
-        n_windows_vertical = len(range(0, image_height[i, 0],
-                                       window_step_vertical[i, 0]))
+        n_windows_horizontal = len(list(range(0, image_width[i, 0],
+                                         window_step_horizontal[i, 0])))
+        n_windows_vertical = len(list(range(0, image_height[i, 0],
+                                       window_step_vertical[i, 0])))
         assert_allclose(hog_im.shape, (n_windows_vertical,
                                        n_windows_horizontal))
 
@@ -47,12 +47,12 @@ def test_windowiterator_hog_no_padding():
             window_step_vertical=window_step_vertical[i, 0],
             window_step_horizontal=window_step_horizontal[i, 0],
             window_step_unit='pixels', padding=False)
-        n_windows_horizontal = len(range(window_width[i, 0] - 1,
+        n_windows_horizontal = len(list(range(window_width[i, 0] - 1,
                                          image_width[i, 0],
-                                         window_step_horizontal[i, 0]))
-        n_windows_vertical = len(range(window_height[i, 0] - 1,
+                                         window_step_horizontal[i, 0])))
+        n_windows_vertical = len(list(range(window_height[i, 0] - 1,
                                        image_height[i, 0],
-                                       window_step_vertical[i, 0]))
+                                       window_step_vertical[i, 0])))
         assert_allclose(hog_img.shape, (n_windows_vertical,
                                         n_windows_horizontal))
 
@@ -70,10 +70,10 @@ def test_windowiterator_lbp_padding():
             window_step_vertical=window_step_vertical[i, 0],
             window_step_horizontal=window_step_horizontal[i, 0],
             window_step_unit='pixels', padding=True)
-        n_windows_horizontal = len(range(0, image_width[i, 0],
-                                         window_step_horizontal[i, 0]))
-        n_windows_vertical = len(range(0, image_height[i, 0],
-                                       window_step_vertical[i, 0]))
+        n_windows_horizontal = len(list(range(0, image_width[i, 0],
+                                         window_step_horizontal[i, 0])))
+        n_windows_vertical = len(list(range(0, image_height[i, 0],
+                                       window_step_vertical[i, 0])))
         assert_allclose(lbp_img.shape, (n_windows_vertical,
                                           n_windows_horizontal))
 
@@ -94,10 +94,10 @@ def test_windowiterator_lbp_no_padding():
             window_step_horizontal=window_step_horizontal[i, 0],
             window_step_unit='pixels', padding=False)
         window_size = 2 * radius[i, 0] + 1
-        n_windows_horizontal = len(range(window_size - 1, image_width[i, 0],
-                                         window_step_horizontal[i, 0]))
-        n_windows_vertical = len(range(window_size - 1, image_height[i, 0],
-                                       window_step_vertical[i, 0]))
+        n_windows_horizontal = len(list(range(window_size - 1, image_width[i, 0],
+                                         window_step_horizontal[i, 0])))
+        n_windows_vertical = len(list(range(window_size - 1, image_height[i, 0],
+                                       window_step_vertical[i, 0])))
         assert_allclose(lbp_img.shape, (n_windows_vertical,
                                         n_windows_horizontal))
 
@@ -120,10 +120,10 @@ def test_hog_channels_dalaltriggs():
                       window_step_vertical=3, window_step_horizontal=3,
                       window_step_unit='pixels', padding=True)
         length_per_block = block_size[i, 0] * block_size[i, 0] * num_bins[i, 0]
-        n_blocks_horizontal = len(range(block_size_pixels - 1, window_width[0],
-                                        cell_size[i, 0]))
-        n_blocks_vertical = len(range(block_size_pixels - 1, window_height[0],
-                                      cell_size[i, 0]))
+        n_blocks_horizontal = len(list(range(block_size_pixels - 1, window_width[0],
+                                        cell_size[i, 0])))
+        n_blocks_vertical = len(list(range(block_size_pixels - 1, window_height[0],
+                                      cell_size[i, 0])))
         n_channels = n_blocks_horizontal * n_blocks_vertical * length_per_block
         assert_allclose(hog_img.n_channels, n_channels)
 
@@ -157,8 +157,8 @@ def test_lbp_channels():
     n_combs = np.random.randint(1, 6, [n_cases, 1])
     channels = np.random.randint(1, 4, [n_cases, 1])
     for i in range(n_cases):
-        radius = random.sample(xrange(1, 10), n_combs[i, 0])
-        samples = random.sample(xrange(4, 12), n_combs[i, 0])
+        radius = random.sample(range(1, 10), n_combs[i, 0])
+        samples = random.sample(range(4, 12), n_combs[i, 0])
         image = MaskedImage(np.random.randn(40, 40, channels[i, 0]))
         lbp_img = lbp(image, radius=radius, samples=samples,
                       window_step_vertical=3, window_step_horizontal=3,

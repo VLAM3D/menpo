@@ -4,8 +4,7 @@ from .helpers import (figure_options, format_figure_options, channel_options,
                       update_landmark_options, info_print, format_info_print,
                       animation_options, format_animation_options,
                       save_figure_options, format_save_figure_options)
-from IPython.html.widgets import (PopupWidget, ContainerWidget, TabWidget,
-                                  RadioButtonsWidget)
+from ipywidgets import (Box, Tab, RadioButtons)
 from IPython.display import display, clear_output
 import matplotlib.pylab as plt
 from menpo.visualize.viewmatplotlib import MatplotlibSubplots
@@ -49,7 +48,7 @@ def _split_wall_of_text(wall):
     lines : `list` of `str`
         List of strings not including empty strings
     """
-    return filter(lambda x: x.strip(), wall.split('\n'))
+    return [x for x in wall.split('\n') if x.strip()]
 
 
 def _join_bullets_as_latex_math(bullets):
@@ -87,7 +86,7 @@ def _raw_info_string_to_latex(raw):
         is converted to a bullet point.
     """
     lines = _split_wall_of_text(raw)
-    bullets = map(lambda x: _bullet_text(x), lines)
+    bullets = [_bullet_text(x) for x in lines]
     return _join_bullets_as_latex_math(bullets)
 
 
@@ -264,20 +263,20 @@ def visualize_images(images, figure_size=(7, 7), popup=False, **kwargs):
             toggle_show_visible=False)
 
         # final widget
-        cont_wid = TabWidget(children=[info_wid, channel_options_wid,
+        cont_wid = Tab(children=[info_wid, channel_options_wid,
                                        landmark_options_wid,
                                        figure_options_wid, save_figure_wid])
-        wid = ContainerWidget(children=[image_number_wid, cont_wid])
+        wid = Box(children=[image_number_wid, cont_wid])
         button_title = 'Images Menu'
     else:
         # final widget
-        wid = TabWidget(children=[info_wid, channel_options_wid,
+        wid = Tab(children=[info_wid, channel_options_wid,
                                   landmark_options_wid, figure_options_wid,
                                   save_figure_wid])
         button_title = 'Image Menu'
     # create popup widget if asked
     if popup:
-        wid = PopupWidget(children=[wid], button_text=button_title)
+        wid = Popup(children=[wid], button_text=button_title)
 
     # display final widget
     display(wid)
@@ -460,7 +459,7 @@ def visualize_shapes(shapes, figure_size=(7, 7), popup=False, **kwargs):
                                         show_axes_default=False,
                                         toggle_show_default=True,
                                         toggle_show_visible=False)
-    axes_mode_wid = RadioButtonsWidget(values={'Image': 1, 'Point cloud': 2},
+    axes_mode_wid = RadioButtons(values={'Image': 1, 'Point cloud': 2},
                                        description='Axes mode:', value=1)
     axes_mode_wid.on_trait_change(plot_function, 'value')
     ch = list(figure_options_wid.children)
@@ -498,18 +497,18 @@ def visualize_shapes(shapes, figure_size=(7, 7), popup=False, **kwargs):
             toggle_show_visible=False)
 
         # final widget
-        cont_wid = TabWidget(children=[info_wid, landmark_options_wid,
+        cont_wid = Tab(children=[info_wid, landmark_options_wid,
                                        figure_options_wid, save_figure_wid])
-        wid = ContainerWidget(children=[image_number_wid, cont_wid])
+        wid = Box(children=[image_number_wid, cont_wid])
         button_title = 'Shapes Menu'
     else:
         # final widget
-        wid = TabWidget(children=[info_wid, landmark_options_wid,
+        wid = Tab(children=[info_wid, landmark_options_wid,
                                   figure_options_wid, save_figure_wid])
         button_title = 'Shape Menu'
     # create popup widget if asked
     if popup:
-        wid = PopupWidget(children=[wid], button_text=button_title)
+        wid = Popup(children=[wid], button_text=button_title)
 
     # display final widget
     display(wid)
@@ -965,7 +964,7 @@ def _plot_eigenvalues(figure_id, model, figure_size, x_scale, y_scale):
 
     # plot eigenvalues ratio
     plt.subplot(211)
-    plt.bar(range(len(model.eigenvalues_ratio())),
+    plt.bar(list(range(len(model.eigenvalues_ratio()))),
             model.eigenvalues_ratio())
     plt.ylabel('Variance Ratio')
     plt.xlabel('Component Number')
@@ -974,7 +973,7 @@ def _plot_eigenvalues(figure_id, model, figure_size, x_scale, y_scale):
 
     # plot eigenvalues cumulative ratio
     plt.subplot(212)
-    plt.bar(range(len(model.eigenvalues_cumulative_ratio())),
+    plt.bar(list(range(len(model.eigenvalues_cumulative_ratio()))),
             model.eigenvalues_cumulative_ratio())
     plt.ylim((0., 1.))
     plt.ylabel('Cumulative Variance Ratio')
@@ -1029,12 +1028,12 @@ def _exrtact_group_labels_landmarks(landmark_manager):
     labels_keys : `list` of `str`
         The list of lists of each landmark group's labels.
     """
-    groups_keys = landmark_manager.keys()
+    groups_keys = list(landmark_manager.keys())
     if len(groups_keys) == 0:
         groups_keys = [' ']
         labels_keys = [[' ']]
     else:
-        labels_keys = [landmark_manager[g].keys() for g in groups_keys]
+        labels_keys = [list(landmark_manager[g].keys()) for g in groups_keys]
     return groups_keys, labels_keys
 
 

@@ -117,7 +117,7 @@ def _validate_filepath(fp, extension, overwrite):
 
 
 def _export(fp, obj, extensions_map, extension=None, overwrite=False):
-    if isinstance(fp, basestring):
+    if isinstance(fp, str):
         path_filepath = _validate_filepath(fp, extension, overwrite)
 
         export_function = _extension_to_export_function(

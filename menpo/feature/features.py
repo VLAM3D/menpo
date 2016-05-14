@@ -618,7 +618,7 @@ def lbp(pixels, radius=None, samples=None, mapping_type='riu2',
         Window step unit must be either pixels or window
     """
     if radius is None:
-        radius = range(1, 5)
+        radius = list(range(1, 5))
     if samples is None:
         samples = [8]*4
 

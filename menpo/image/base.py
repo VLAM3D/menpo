@@ -1,4 +1,4 @@
-from __future__ import division
+
 import abc
 from warnings import warn
 
@@ -52,7 +52,7 @@ def indices_for_image_of_shape(shape):
     return np.indices(shape).reshape([len(shape), -1]).T
 
 
-class Image(Vectorizable, LandmarkableViewable):
+class Image(Vectorizable, LandmarkableViewable, metaclass=abc.ABCMeta):
     r"""
     An n-dimensional image.
 
@@ -83,8 +83,6 @@ class Image(Vectorizable, LandmarkableViewable):
     ValueError
         If the pixel array is malformed
     """
-
-    __metaclass__ = abc.ABCMeta
 
     def __init__(self, image_data, copy=True):
         super(Image, self).__init__()

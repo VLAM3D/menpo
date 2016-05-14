@@ -92,10 +92,10 @@ master_doc = 'index'
 autodoc_member_order = 'groupwise'
 
 # General information about the project.
-project = u'Menpo'
-authors = (u'Joan Alabort-i-Medina, Epameinondas Antonakos, James Booth,'
+project = 'Menpo'
+authors = ('Joan Alabort-i-Medina, Epameinondas Antonakos, James Booth,'
             ' Patrick Snape, and Stefanos Zafeiriou')
-copyright = u'2014, ' + authors
+copyright = '2014, ' + authors
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -244,7 +244,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'Menpo.tex', u'Menpo Documentation',
+    ('index', 'Menpo.tex', 'Menpo Documentation',
      authors, 'manual'),
 ]
 
@@ -274,7 +274,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'menpo', u'Menpo Documentation',
+    ('index', 'menpo', 'Menpo Documentation',
      [authors], 1)
 ]
 
@@ -288,7 +288,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'Menpo', u'Menpo Documentation',
+    ('index', 'Menpo', 'Menpo Documentation',
      authors,
      'Menpo', 'One line description of project.',
      'Miscellaneous'),
